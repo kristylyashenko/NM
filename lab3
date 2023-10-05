@@ -1,0 +1,54 @@
+import sympy as sp
+
+def method_newthon():
+    x = sp.symbols('x')
+    f = 3 * x**4 - 10 * x**3 + x**2 - 5 * x - 3
+    x0 = 1  
+    max_iterations = 1000  
+    x_n = x0
+    iteration = 0
+
+    while iteration < max_iterations:
+        f_prime = sp.diff(f, x).evalf(subs={x: x_n})
+        
+        x_n = x_n - f.evalf(subs={x: x_n}) / f_prime
+        iteration += 1
+
+    print(f"Method Newthon`s: x ≈  {x_n}")
+
+method_newthon()
+
+def method_comb():
+    x = sp.symbols('x')
+    f = 3 * x**4 - 10 * x**3 + x**2 - 5 * x - 3
+    f_prime = sp.diff(f, x)
+    a = 5
+    b = 6
+    tolerance = 1e-10
+    max_iterations = 1000
+    
+    while (b - a) / 2 > tolerance:
+        midpoint = (a + b) / 2
+        if f.subs(x, midpoint) == 0:
+            break
+        elif f.subs(x, a) * f.subs(x, midpoint) < 0:
+            b = midpoint
+        else:
+            a = midpoint
+
+    x_approx = (a + b) / 2
+    x_n = x_approx
+    iteration = 0
+    while iteration < max_iterations:
+        f_n = f.subs(x, x_n)
+        f_prime_n = f_prime.subs(x, x_n)
+        
+        x_n = x_n - f_n / f_prime_n
+        iteration += 1
+
+
+    print(f"Method Combinations: x ≈ {x_n}")
+
+method_comb()
+Method Newthon`s: x ≈  -0.410676617285166
+Method Combinations: x ≈ 3.40455573456614

@@ -1,0 +1,33 @@
+def f(x):
+    return 9 * x**4 + 12 * x**3 - x**2 - 2
+
+def df(x):
+    return 36 * x**3 + 36 * x**2 - 2 * x
+
+def bisection_method(a, b, tol):
+    while (b - a) / 2.0 > tol:
+        c = (a + b) / 2.0
+        if f(c) == 0.0:
+            return c
+        elif f(c) * f(a) < 0:
+            b = c
+        else:
+            a = c
+    return (a + b) / 2.0
+
+def secant_method(a, b, tol):
+    while abs(f(b)) >= tol:
+        c = b - f(b) * (b - a) / (f(b) - f(a))
+        a, b = b, c
+    return b
+
+tolerance = 0.0001
+a, b = 0, 1
+
+# Метод половинного ділення
+result_bisection = bisection_method(a, b, tolerance)
+print("Метод половинного ділення:", result_bisection)
+
+# Метод хорд
+result_secant = secant_method(a, b, tolerance)
+print("Метод хорд:", result_secant)

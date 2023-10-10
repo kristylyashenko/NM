@@ -1,0 +1,124 @@
+import numpy as np
+
+# Створимо матрицю A
+A = np.array([[1,2],
+              [4, -1]])
+
+# Створимо матрицю B
+B = np.array([[2,-3],
+              [4, 1]])
+
+# Обчислимо матрицю C
+C = np.dot(A, B) - np.dot(B, A)
+
+print("Матриця C:")
+print(C)
+#2
+import numpy as np
+
+# Створимо матрицю A
+A = np.array([[-1,2],
+              [0, 1]])
+
+# Обчислимо матрицю C
+C = pow(A,2)
+
+
+print(C)
+#3
+import numpy as np
+
+# Створимо матрицю A
+A = np.array([[3,5],
+              [6, -1]])
+
+# Створимо матрицю B
+B = np.array([[2,1],
+              [-3, 2]])
+
+# Обчислимо матрицю C
+C = A * B
+
+print("Матриця C:")
+print(C)
+#4
+import numpy as np
+
+# Для матриці 3x3
+B = np.array([[2, 3, 4],
+              [1, 0, 6],
+              [7, 8, 9]])
+
+det_3x3 = np.linalg.det(B)
+
+
+print("Визначник матриці 3x3:", det_3x3)
+#5
+import numpy as np
+
+# Для матриці 4x4
+B = np.array([[1, 2, 3,4],
+              [3, -1, 2,5],
+              [1, 2, 3,4],
+              [1,3,4,5]
+              ])
+
+det_4x4 = np.linalg.det(B)
+
+
+print("Визначник матриці 4x4:", det_4x4)
+#8
+import numpy as np
+
+A = np.array([[1, -2, 1],
+              [2, -1, 1],
+              [3, 2, 2]])
+
+B = np.array([4, 3, 2])
+detA = np.linalg.det(A)
+
+A_x = A.copy()
+A_x[:, 0] = B
+detA_x = np.linalg.det(A_x)
+
+A_y = A.copy()
+A_y[:, 1] = B
+detA_y = np.linalg.det(A_y)
+
+A_z = A.copy()
+A_z[:, 2] = B
+detA_z = np.linalg.det(A_z)
+
+x = detA_x / detA
+y = detA_y / detA
+z = detA_z / detA
+
+print("Решение:")
+print("x =", x)
+print("y =", y)
+print("z =", z)
+#9
+import numpy as np
+N = 5
+M = 6 
+
+A = np.random.randint(1, 11, size=(N, M))
+
+total_sum = np.sum(A)
+
+column_sums = np.sum(A, axis=0)
+
+column_fractions = column_sums / total_sum
+
+print("Матриця A:")
+print(A)
+
+print("\nСума всіх елементів матриці:", total_sum)
+
+print("\nСуми елементів кожного стовпця:")
+for i, col_sum in enumerate(column_sums):
+    print(f"Сума стовпця {i + 1}: {col_sum}")
+
+print("\nДолі сум елементів кожного стовпця відносно загальної суми:")
+for i, fraction in enumerate(column_fractions):
+    print(f"Доля стовпця {i + 1}: {fraction:.2%}")

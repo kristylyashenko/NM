@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import lagrange
+
+x = np.array([-4., -3., -1., 3.], dtype=float)
+y = np.array([-15., 5., 3., -1.], dtype=float)
+
+x_test = np.array([-3.5, -2, 1.5, 2])  
+
+def lagrange_interpolation(x, y, x_test):
+    n = len(x)
+    result = 0.0
+    for i in range(n):
+        p_i = 1
+        for j in range(n):
+            if i != j:
+                p_i *= (x_test - x[j]) / (x[i] - x[j])
+        result += y[i] * p_i
+    return result
+
+for test_point in x_test:
+    f_interp = lagrange_interpolation(x, y, test_point)
+    print(f"Значення функції у точці {test_point} = {f_interp:.4f}")
+
+xnew = np.linspace(np.min(x), np.max(x), 100)  
+ynew = [lagrange_interpolation(x, y, i) for i in xnew]
+
+plt.plot(x, y, 'o', xnew, ynew)  
+plt.title('Lagrange Polynomial')
+plt.grid(True)
+plt.show()
+
+f = lagrange(x, y)
+fig = plt.figure(figsize=(7, 5))
+plt.plot(xnew, f(xnew), 'b', x, y, 'ro')
+plt.title('Lagrange Polynomial')
+plt.grid()
+plt.xlabel('x')
+plt.ylabel('y')
+plt.show()
+Значення функції у точці -3.5 = -2.6250
+Значення функції у точці -2.0 = 9.0000
+Значення функції у точці 1.5 = -16.3750
+Значення функції у точці 2.0 = -15.0000

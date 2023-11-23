@@ -1,0 +1,89 @@
+import numpy as np 
+
+import matplotlib.pyplot as plt 
+
+ 
+
+ 
+
+x = np.array([i * 0.05 for i in range(11)]) 
+
+y = np.array([33.1154, 34.8133, 36.5982, 38.4747, 40.4473, 42.5211, 44.7012, 46.9931, 49.4024, 51.9354, 54.5982]) 
+
+ 
+
+def divided_differences(x, y): 
+
+    n = len(x) 
+
+    f = np.zeros((n, n)) 
+
+    f[:, 0] = y 
+
+    for j in range(1, n): 
+
+        for i in range(n - j): 
+
+            f[i, j] = (f[i + 1, j - 1] - f[i, j - 1]) / (x[i + j] - x[i]) 
+
+    return f 
+
+ 
+
+def newton_interpolation(x, y, x0): 
+
+    n = len(x) 
+
+    f = divided_differences(x, y) 
+
+    ans = f[0, 0] 
+
+    term = 1 
+
+    for j in range(1, n): 
+
+        term *= (x0 - x[j - 1]) 
+
+        ans += f[0, j] * term 
+
+    return ans 
+
+ 
+
+x1 = 3.55 
+
+x2 = 3.60 
+
+y1 = newton_interpolation(x, y, x1) 
+
+y2 = newton_interpolation(x, y, x2) 
+
+print(f"f({x1}) = {y1}") 
+
+print(f"f({x2}) = {y2}") 
+
+ 
+
+xx = np.linspace(np.min(x), np.max(x), 100) 
+
+yy = np.zeros_like(xx) 
+
+for i in range(len(xx)): 
+
+    yy[i] = newton_interpolation(x, y, xx[i]) 
+
+ 
+
+plt.plot(x, y, 'o', label='Данные точки') 
+
+plt.plot(xx, yy, label='Багатошлен Ньютона') 
+
+plt.title("График интерполяционной функции Ньютона") 
+
+plt.xlabel("x") 
+
+plt.ylabel("y") 
+
+plt.legend() 
+
+plt.show() 

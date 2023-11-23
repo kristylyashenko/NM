@@ -1,0 +1,126 @@
+# Аналітичні розрахунки(наближення прямою)
+import numpy as np
+
+def func(x):
+    return 2*x + np.cos(2*x)
+
+x = np.arange(0.1, 1.1, 0.1)
+y = func(x)
+
+x_mean = np.mean(x)
+y_mean = np.mean(y)
+xy_mean = np.mean(x * y)
+x_squared_mean = np.mean(x**2)
+x_cubic_mean = np.mean(x**3)
+x_forth_mean = np.mean(x**4)
+xy_squared_mean = np.mean((x**2) * y)
+a1 = (xy_mean - x_mean * y_mean) / (x_squared_mean - x_mean**2)
+a0 = y_mean - a1 * x_mean
+
+print("Лінйна апроксимація:")
+print(f"a1: {a1:.2f}")
+print(f"a0: {a0:.2f}")
+print(f"f(x) ≈ {a1:.2f}x + {a0:.2f} ")
+
+# Аналітичні розрахунки(наближення параболою)
+import numpy as np
+def func(x):
+   return 2*x + np.cos(2*x)
+
+x = np.arange(0.1, 1.1, 0.1)
+y = func(x)
+
+x_bar = np.mean(x)
+y_bar = np.mean(y)
+x_squared_bar = np.mean(x**2)
+x_cubed_bar = np.mean(x**3)
+x_fourth_bar = np.mean(x**4)
+xy_bar = np.mean(x * y)
+xy_squared_bar = np.mean((x**2) * y)
+
+A = np.array([[1, x_bar, x_squared_bar],
+              [x_bar, x_squared_bar, x_cubed_bar],
+              [x_squared_bar, x_cubed_bar, x_fourth_bar]])
+
+B = np.array([y_bar, xy_bar, xy_squared_bar])
+
+coefficients = np.linalg.solve(A, B)
+a0, a1, a2 = coefficients
+print("Квадратична апроксимація:")
+print(f"a0: {a0:.2f}")
+print(f"a1: {a1:.2f}")
+print(f"a2: {a2:.2f}")
+print(f"f(x) ≈ {a2:.2f}x^2+ {a1:.2f}x + {a0:.2f}")
+
+#МНК наближення прямою
+import numpy as np
+import matplotlib.pyplot as plt
+
+def func(x):
+    return 2*x + np.cos(2*x)
+x = np.arange(0.1, 1.1, 0.1)
+y = func(x)
+
+print("x:", x)
+print("y:", y)
+
+A_linear = np.vstack([x, np.ones(len(x))]).T
+a_linear, c_linear = np.linalg.lstsq(A_linear, y, rcond=None)[0]
+linear_approximation = a_linear * x + c_linear
+
+print("Коефіцієнти для лінійної апроксимації:")
+print(f"a1: {a_linear:.2f}, a0: {c_linear:.2f}")
+print(f"f(x) ≈ {a_linear:.2f}x + {c_linear:.2f}")
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label="Функція y = sin(2x + 1) + 2x", marker="o", linestyle=" ", color="blue")
+plt.locator_params(axis="x", nbins=10)
+plt.locator_params(axis="y", nbins=20)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Наближення функції методом найменших квадратів")
+plt.plot(x, linear_approximation, label=f"Лінійна апроксимація ", color="red")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+#МНК наближення параболою
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import least_squares
+
+def func(x):
+    return 2*x + np.cos(2*x)
+
+x = np.arange(0.1, 1.1, 0.1)
+y = func(x)
+print("x:", x)
+print("y:", y)
+
+def quadratic_function(a, x):
+    return a[0] * x**2 + a[1] * x + a[2]
+
+def quadratic_approximation(x, y):
+    def fun(a, x, y):
+        return quadratic_function(a, x) - y
+    a0 = np.ones(3) 
+    parabola_approx = least_squares(fun, a0, args=(x, y))
+    return parabola_approx.x
+
+a_quad = quadratic_approximation(x, y)
+x_p = np.linspace(min(x), max(x), 100)
+y_p = quadratic_function(a_quad, x_p)
+print("Коефіцієнти для лінійної апроксимації:")
+print(f"a2: {a_quad[0]:.2f},a1: {a_quad[1]:.2f},a0: {a_quad[2]:.2f}")
+print(f"f(x) ≈ {a_quad[0]:.2f}x^2 + {a_quad[1]:.2f}x + {a_quad[2]:.2f}")
+
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label="Функція y = sin(2x + 1) + 2x", marker="o", linestyle=" ", color="blue")
+plt.plot(x_p, quadratic_function(a_quad, x_p), label=f"Квадратична апроксимація", color="green")
+plt.locator_params(axis="x", nbins=10)
+plt.locator_params(axis="y", nbins=20)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Наближення функції методом найменших квадратів")
+plt.legend()
+plt.grid(True)
+plt.show()

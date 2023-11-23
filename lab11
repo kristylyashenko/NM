@@ -1,0 +1,117 @@
+import numpy as np
+from scipy import integrate
+
+def integrand_function(x):
+    return np.sqrt(x + 1)
+
+def rectangle_rule_integration(a, b, n, method):
+    integral_value = 0
+    width = (b - a) / n
+
+    for i in range(n):
+        x_i = a + (i + method) * width
+        integral_value += integrand_function(x_i) * width
+
+    return integral_value
+
+def runge_rule_integration(a, b, epsilon, n, method):
+    result = rectangle_rule_integration(a, b, n, method)
+    result2 = rectangle_rule_integration(a, b, 2 * n, method)
+
+    while abs(result2 - result) >= 3 * epsilon:
+        n *= 2
+        result = result2
+        result2 = rectangle_rule_integration(a, b, 2 * n, method)
+
+    return result2
+
+a = 1.8
+b = 0.8
+epsilon = 0.0001
+n = 10
+
+left_result = runge_rule_integration(a, b, epsilon, n, 0)
+right_result = runge_rule_integration(a, b, epsilon, n, 1)
+midpoint_result = runge_rule_integration(a, b, epsilon, n, 0.5)
+
+print(f"Лівий прямокутник: {left_result:.5f}")
+print(f"Правий прямокутник: {right_result:.5f}")
+print(f"Середній прямокутник: {midpoint_result:.5f}")
+
+# Перевірка методу:
+print("Перевірка методу:", round(integrate.quad(integrand_function, 1.8, 0.8)[0], 5))
+Лівий прямокутник: -1.51382
+Правий прямокутник: -1.51330
+Середній прямокутник: -1.51357
+Перевірка методу: -1.51356
+
+
+import math
+from scipy import integrate
+
+def integrand_function(x):
+    return math.cos(x**2) / x + 1
+
+def simpsons_rule_integration(a, b, n):
+    h = (b - a) / n
+    result = integrand_function(a) + integrand_function(b)
+    for i in range(1, n):
+        x_i = a + i * h
+        if i % 2 == 0:
+            result += 2 * integrand_function(x_i)
+        else:
+            result += 4 * integrand_function(x_i)
+    return result * h / 3
+
+a = 0.4
+b = 12
+n = 8
+epsilon = 0.001
+result = simpsons_rule_integration(a, b, n)
+
+while True:
+    n *= 2
+    previous_result = result
+    result = simpsons_rule_integration(a, b, n)
+    if abs(result - previous_result) <= epsilon:
+        break
+print(f"Значення інтегралу через метод Сімпсона: {result:.5f}")
+
+# Проверка метода с использованием integrate.quad
+v, err = integrate.quad(integrand_function, a, b)
+print("Перевірка методу: ", round(v, 5))
+Значення інтегралу через метод Сімпсона: 12.22914
+Перевірка методу:  12.22915
+
+
+import numpy as np
+import scipy.integrate as integrate
+
+def integrand_function(x):
+    return np.sqrt((x**2) + 2.5)
+
+def trapezoidal_rule_integration(a, b, n):
+    h = (b - a) / n
+    result = (integrand_function(a) + integrand_function(b)) / 2
+    for i in range(1, n):
+        result += integrand_function(a + i * h)
+    return result * h
+
+a = 1.6
+b = 2.2
+n = 10
+epsilon = 0.001
+result = trapezoidal_rule_integration(a, b, n)
+
+while True:
+    n *= 2
+    previous_result = result
+    result = trapezoidal_rule_integration(a, b, n)
+    if abs(result - previous_result) <= epsilon:
+        break
+print(f"Значення інтегралу через метод трапеції: {result:.5f}")
+
+v, err = integrate.quad(integrand_function, 1.6, 2.2)
+print("Перевірка методу: ", round(v, 5))
+Значення інтегралу через метод трапеції: 1.48461
+Перевірка методу:  1.4846
